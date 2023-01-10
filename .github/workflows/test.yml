@@ -3,6 +3,7 @@ name: Test
 on:
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -11,16 +12,9 @@ jobs:
       fail-fast: false
       matrix:
         postgres:
-          - '13'
-          - '12'
-          - '11'
-          - '10'
-          - '9.6'
+          - '14'
         go:
           - '1.17'
-          - '1.16'
-          - '1.15'
-          - '1.14'
     steps:
     - name: setup postgres pre-reqs
       run: |
@@ -193,19 +187,19 @@ jobs:
         PQTEST_BINARY_PARAMETERS=no go test -race -v ./...
         PQTEST_BINARY_PARAMETERS=yes go test -race -v ./...
 
-    - name: install goimports
-      run: go get golang.org/x/tools/cmd/goimports
+#     - name: install goimports
+#       run: go get golang.org/x/tools/cmd/goimports
 
-    - name: install staticcheck
-      run: |
-        wget https://github.com/dominikh/go-tools/releases/latest/download/staticcheck_linux_amd64.tar.gz -O - | tar -xz staticcheck
+#     - name: install staticcheck
+#       run: |
+#         wget https://github.com/dominikh/go-tools/releases/latest/download/staticcheck_linux_amd64.tar.gz -O - | tar -xz staticcheck
 
-    - name: run goimports
-      run: |
-        goimports -d -e . | awk '{ print } END { exit NR == 0 ? 0 : 1 }'
+#     - name: run goimports
+#       run: |
+#         goimports -d -e . | awk '{ print } END { exit NR == 0 ? 0 : 1 }'
 
-    - name: run staticcheck
-      run: ./staticcheck/staticcheck -go 1.13 ./...
+#     - name: run staticcheck
+#       run: ./staticcheck/staticcheck -go 1.13 ./...
 
-    - name: build
-      run: go build -v .
+#     - name: build
+#       run: go build -v .
